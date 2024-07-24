@@ -9,13 +9,14 @@ import { Error } from './Error';
 import { RecentResult, RoundResult } from '../types';
 import { calculateNewScore } from '../helpers/calculateNewScore';
 import { RoundResultBoard } from './RoundResultBoard';
+import { useLocalStorageData } from '../hooks/useLocalStorageData';
 
 export const Game = () => {
-  const [score, setScore] = useState(0);
-  const [recentResults, setRecentResults] = useState<RecentResult[]>([]);
   const [roundResult, setRoundResult] = useState<RoundResult | null>(null);
   const [playRound] = usePlayRoundMutation();
   const { data: choices, isLoading, isError, isSuccess } = useFetchChoicesQuery();
+  const { data: score, update: updateScore } = useLocalStorageData<number>('score', 0);
+  const { data: recentResults, update: updateRecentResults } = useLocalStorageData<RecentResult[]>('recentResults', []);
 
   const handleSelection = async (value: string) => {
     const choiceId = choices?.find((choice) => choice.name === value)?.id;
@@ -39,12 +40,10 @@ export const Game = () => {
 
     setRoundResult(preparedResultData);
     const scoreValue = calculateNewScore(data.results, score);
-    setScore(scoreValue);
+    updateScore(scoreValue);
 
-    setRecentResults((prevResults) => {
-      const updatedResults = [{ playerChoice, contestantChoice, result: data.results }, ...prevResults].slice(0, 10);
-      return updatedResults;
-    });
+    const updatedResults = [{ playerChoice, contestantChoice, result: data.results }, ...recentResults].slice(0, 10);
+    updateRecentResults(updatedResults);
   };
 
   const handleResetRoundResult = () => {
@@ -52,7 +51,8 @@ export const Game = () => {
   };
 
   const handleResetScore = () => {
-    setScore(0);
+    updateScore(0);
+    updateRecentResults([]);
   };
 
   const gameBoard = (
