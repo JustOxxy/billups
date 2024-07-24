@@ -6,10 +6,11 @@ import { useState } from 'react';
 import { GameBoardWrapper } from './GameBoardWrapper';
 import { Loading } from './Loading';
 import { Error } from './Error';
-import { RecentResult, RoundResult } from '../types';
+import { GameResult, RecentResult, RoundResult } from '../types';
 import { calculateNewScore } from '../helpers/calculateNewScore';
 import { RoundResultBoard } from './RoundResultBoard';
 import { useLocalStorageData } from '../hooks/useLocalStorageData';
+import { Confetti } from './Confetti';
 
 export const Game = () => {
   const [roundResult, setRoundResult] = useState<RoundResult | null>(null);
@@ -73,6 +74,7 @@ export const Game = () => {
       <ScoreBoard score={score} resetScore={handleResetScore} />
       {gameBoard}
       <RecentResultsBoard recentResults={recentResults} />
+      {roundResult?.results === GameResult.Win && <Confetti />}
     </>
   );
 };
