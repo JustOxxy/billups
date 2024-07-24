@@ -1,8 +1,9 @@
+import { useState } from 'react';
+
 import { ScoreBoard } from './ScoreBoard';
 import { useFetchChoicesQuery, usePlayRoundMutation } from '../services/api';
 import { RecentResultsBoard } from './RecentResultsBoard';
 import { GameBoard } from './GameBoard';
-import { useState } from 'react';
 import { GameBoardWrapper } from './GameBoardWrapper';
 import { Loading } from './Loading';
 import { Error } from './Error';
