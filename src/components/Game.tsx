@@ -6,12 +6,13 @@ import { useState } from 'react';
 import { GameBoardWrapper } from './GameBoardWrapper';
 import { Loading } from './Loading';
 import { Error } from './Error';
-import { RoundResult } from '../types';
+import { RecentResult, RoundResult } from '../types';
 import { calculateNewScore } from '../helpers/calculateNewScore';
 import { RoundResultBoard } from './RoundResultBoard';
 
 export const Game = () => {
   const [score, setScore] = useState(0);
+  const [recentResults, setRecentResults] = useState<RecentResult[]>([]);
   const [roundResult, setRoundResult] = useState<RoundResult | null>(null);
   const [playRound] = usePlayRoundMutation();
   const { data: choices, isLoading, isError, isSuccess } = useFetchChoicesQuery();
@@ -39,6 +40,11 @@ export const Game = () => {
     setRoundResult(preparedResultData);
     const scoreValue = calculateNewScore(data.results, score);
     setScore(scoreValue);
+
+    setRecentResults((prevResults) => {
+      const updatedResults = [{ playerChoice, contestantChoice, result: data.results }, ...prevResults].slice(0, 10);
+      return updatedResults;
+    });
   };
 
   const handleResetRoundResult = () => {
@@ -66,7 +72,7 @@ export const Game = () => {
     <>
       <ScoreBoard score={score} resetScore={handleResetScore} />
       {gameBoard}
-      <RecentResultsBoard />
+      <RecentResultsBoard recentResults={recentResults} />
     </>
   );
 };
