@@ -1,8 +1,17 @@
-```
-npm install
-npm run dev
+## Installation
+
+```sh
+pnpm install
 ```
 
+## Add .env.local
+
+```sh
+You could find the example in the .env.example
 ```
-open http://localhost:3000
+
+## To run
+
+```sh
+pnpm dev
 ```
