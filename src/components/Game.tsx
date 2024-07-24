@@ -8,6 +8,7 @@ import { Loading } from './Loading';
 import { Error } from './Error';
 import { RoundResult } from '../types';
 import { calculateNewScore } from '../helpers/calculateNewScore';
+import { RoundResultBoard } from './RoundResultBoard';
 
 export const Game = () => {
   const [score, setScore] = useState(0);
@@ -40,6 +41,10 @@ export const Game = () => {
     setScore(scoreValue);
   };
 
+  const handleResetRoundResult = () => {
+    setRoundResult(null);
+  };
+
   const handleResetScore = () => {
     setScore(0);
   };
@@ -48,7 +53,12 @@ export const Game = () => {
     <GameBoardWrapper>
       {isError && <Error />}
       {isLoading && <Loading />}
-      {isSuccess && (roundResult ? <RoundResultBoard /> : <GameBoard handleSelection={handleSelection} />)}
+      {isSuccess &&
+        (roundResult ? (
+          <RoundResultBoard roundResult={roundResult} resetRoundResult={handleResetRoundResult} />
+        ) : (
+          <GameBoard handleSelection={handleSelection} />
+        ))}
     </GameBoardWrapper>
   );
 
