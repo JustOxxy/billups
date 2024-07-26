@@ -1,6 +1,8 @@
 const confettiPieces = Array.from({ length: 100 });
 
 export const Confetti = () => {
+  const tailwindClasses = 'hidden bg-red-500 bg-blue-500 bg-green-500 bg-yellow-500 bg-pink-500 bg-purple-500';
+
   return (
     <div className="h-screen w-full overflow-hidden">
       <style>
@@ -23,7 +25,7 @@ export const Confetti = () => {
           }
         `}
       </style>
-
+      <div className={tailwindClasses}></div>
       {confettiPieces.map((_, index) => (
         <div
           key={index}
